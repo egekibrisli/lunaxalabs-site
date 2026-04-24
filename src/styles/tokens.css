@@ -1,0 +1,95 @@
+:root {
+  --bg: #F5F0E4;
+  --bg-alt: #EEE8DA;
+  --bg-dark: #E6DFCD;
+  --ink: #181511;
+  --ink-2: #3D362E;
+  --ink-3: #6B6055;
+  --ink-4: #9E9489;
+  --border: #D8CEB9;
+  --border-soft: #E2D9C5;
+  --accent: #1F3D2E;
+  --accent-2: #2C5440;
+  --red: #8B2C2C;
+  --red-bright: #A33838;
+  --dark-bg: #131E17;
+  --dark-surface: #1A2620;
+  --dark-accent: #8FC9A8;
+
+  /* v4 additions */
+  --amber: #BA7517;
+  --indigo: #2C4A7C;
+  --terracotta: #B8352C;
+
+  /* v5 additions — section color moments */
+  --rose-bg: #F5E8DC;
+  --sage-bg: #E8EFE2;
+  --butter-bg: #F5EED3;
+  --indigo-bg: #DFE2EC;
+  --rose-accent: #9E3D2E;
+  --amber-rich: #B5751C;
+  --indigo-rich: #2E467C;
+  --accent-bright: #2C5440;
+
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+  --mono: 'IBM Plex Mono', Menlo, monospace;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 900px 600px at 12% 6%, rgba(31, 61, 46, 0.055), transparent 55%),
+    radial-gradient(ellipse 820px 520px at 88% 94%, rgba(139, 44, 44, 0.04), transparent 55%),
+    radial-gradient(ellipse 700px 500px at 50% 50%, rgba(200, 160, 80, 0.025), transparent 72%),
+    var(--bg);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 0.09  0 0 0 0 0.07  0 0 0 0 0.04  0 0 0 0.14 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+}
+
+@keyframes pulse-node {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+.pulse {
+  animation: pulse-node 2.8s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes seal-rotate { to { transform: rotate(360deg); } }
+.seal-rotating {
+  transform-origin: 50% 50%;
+  transform-box: view-box;
+  animation: seal-rotate 200s linear infinite;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes ticker-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+@keyframes wave-scroll-anim {
+  from { transform: translateX(0); }
+  to { transform: translateX(-280px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse, .seal-rotating { animation: none; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

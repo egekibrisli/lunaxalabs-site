@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lunaxa Labs — A laboratory for ambitious software</title>
+<style>
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/instrument-serif/index.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans/400.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans/500.css');
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-mono/400.css');
+
+:root {
+  --bg: #F5F0E4;
+  --bg-alt: #EEE8DA;
+  --bg-dark: #E6DFCD;
+  --ink: #181511;
+  --ink-2: #3D362E;
+  --ink-3: #6B6055;
+  --ink-4: #9E9489;
+  --border: #D8CEB9;
+  --border-soft: #E2D9C5;
+  --accent: #1F3D2E;
+  --accent-2: #2C5440;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+  --mono: 'IBM Plex Mono', Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Paper grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='7'/><feColorMatrix values='0 0 0 0 0.09  0 0 0 0 0.07  0 0 0 0 0.04  0 0 0 0.14 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.45;
+  mix-blend-mode: multiply;
+}
+
+/* Typography */
+h1, h2, h3, h4 { font-weight: 400; letter-spacing: -0.01em; }
+.serif { font-family: var(--serif); font-weight: 400; }
+.mono { font-family: var(--mono); }
+em { font-style: italic; color: var(--accent); }
+::selection { background: var(--accent); color: var(--bg); }
+
+/* Container */
+.container { max-width: 1320px; margin: 0 auto; padding: 0 56px; }
+
+/* Colophon bar */
+.colophon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 56px;
+  background: var(--bg-dark);
+  border-bottom: 0.5px solid var(--border);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+.colophon .center { letter-spacing: 0.22em; color: var(--ink-2); }
+
+/* Nav */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px 56px;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg);
+}
+.logo-block { display: flex; align-items: baseline; gap: 14px; }
+.logo { font-family: var(--serif); font-size: 30px; letter-spacing: 0.005em; color: var(--ink); }
+.logo em { font-style: italic; color: var(--accent); }
+.logo-sub {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+.nav-links {
+  display: flex;
+  gap: 36px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+}
+.nav-links a { color: inherit; text-decoration: none; position: relative; padding-bottom: 3px; transition: color 0.3s ease; }
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 0.5px;
+  background: var(--accent);
+  transition: width 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-links a:hover::after { width: 100%; }
+
+.btn-primary, .btn-ghost {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 12px 22px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  border: 0.5px solid var(--ink);
+  font-weight: 500;
+}
+.btn-primary { background: var(--ink); color: var(--bg); }
+.btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: var(--bg); }
+
+/* HERO */
+.hero {
+  padding: 100px 56px 110px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 80px;
+  align-items: start;
+  border-bottom: 0.5px solid var(--border);
+  position: relative;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+.hero::before {
+  content: '§ I';
+  position: absolute;
+  top: 100px; left: 56px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-4);
+  transform: translateX(-140%);
+}
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.hero-meta::before { content: ''; width: 32px; height: 0.5px; background: var(--ink-3); }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(56px, 7.5vw, 104px);
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+  margin-bottom: 36px;
+  color: var(--ink);
+}
+.hero p.lede {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 460px;
+  margin-bottom: 16px;
+}
+.hero p.footnote {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-4);
+  margin-bottom: 38px;
+  letter-spacing: 0.02em;
+}
+.hero p.footnote sup { color: var(--accent); }
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* Plate */
+.plate {
+  background: var(--bg-alt);
+  border: 0.5px solid var(--border);
+  padding: 22px 22px 18px;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.plate:hover { transform: translateY(-3px); }
+.plate-corners::before, .plate-corners::after,
+.plate-corners-b::before, .plate-corners-b::after {
+  content: '';
+  position: absolute;
+  width: 14px; height: 14px;
+  border: 0.5px solid var(--accent);
+}
+.plate-corners::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.plate-corners::after { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+.plate-corners-b::before { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+.plate-corners-b::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+.plate-head {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px dashed var(--border);
+}
+.plate-head strong { color: var(--accent); font-weight: 500; }
+.plate-caption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin-top: 16px;
+  margin-bottom: 12px;
+  max-width: 95%;
+}
+.plate-legend {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+  padding-top: 10px;
+  border-top: 0.5px dashed var(--border);
+}
+.plate-legend span { color: var(--accent); }
+.scalebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--ink-4);
+  margin-top: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.scalebar::before { content: ''; width: 36px; height: 0.5px; background: var(--ink); }
+
+/* SECTION */
+.section {
+  padding: 110px 0;
+  border-bottom: 0.5px solid var(--border);
+  position: relative;
+}
+.section-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 56px;
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 56px;
+  align-items: start;
+}
+.aside {
+  position: sticky;
+  top: 32px;
+}
+.aside-tag {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 0.5px solid var(--accent);
+  display: block;
+}
+.aside-section-no {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  color: var(--ink-4);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: block;
+}
+.aside-note {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-3);
+  padding-top: 16px;
+  border-top: 0.5px dashed var(--border);
+  margin-top: 16px;
+}
+
+h2.section-title {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4.5vw, 56px);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 22px;
+  max-width: 720px;
+}
+.section-lede {
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 560px;
+  margin-bottom: 56px;
+}
+.section-lede sup { color: var(--accent); font-family: var(--mono); font-size: 10px; }
+
+/* Abstract */
+.abstract-body { max-width: 700px; }
+.abstract-body p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  margin-bottom: 22px;
+}
+.abstract-body p.pull {
+  font-family: var(--serif);
+  font-size: 26px;
+  line-height: 1.35;
+  color: var(--ink);
+  font-style: italic;
+  padding: 18px 0 22px;
+  border-top: 0.5px solid var(--border);
+  border-bottom: 0.5px solid var(--border);
+  margin: 34px 0;
+}
+.abstract-body p.pull em { color: var(--accent); }
+
+/* Methods */
+.method-row {
+  display: grid;
+  grid-template-columns: 64px 180px 1fr;
+  gap: 28px;
+  padding: 32px 0;
+  border-top: 0.5px solid var(--border);
+  align-items: baseline;
+  transition: background-color 0.4s ease;
+}
+.method-row:last-child { border-bottom: 0.5px solid var(--border); }
+.method-row:hover { background-color: rgba(31, 61, 46, 0.025); }
+.method-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 34px;
+  color: var(--accent);
+  line-height: 1;
+}
+.method-key {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+  text-transform: uppercase;
+  padding-top: 10px;
+}
+.method-desc { padding-top: 4px; }
+.method-desc-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 21px;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.005em;
+}
+.method-desc-body {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  max-width: 540px;
+  line-height: 1.65;
+}
+
+/* Protocols */
+.proto-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.proto {
+  background: var(--bg-alt);
+  border: 0.5px solid var(--border);
+  padding: 30px 26px 26px;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.proto:hover {
+  background: var(--bg-dark);
+  transform: translateY(-4px);
+  border-color: var(--accent);
+}
+.proto-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.proto-code {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 64px;
+  color: var(--accent);
+  line-height: 0.9;
+  display: block;
+  margin-bottom: 22px;
+}
+.proto-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  color: var(--ink);
+  margin-bottom: 12px;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+}
+.proto-desc {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  min-height: 72px;
+}
+.proto ul { list-style: none; }
+.proto li {
+  padding: 9px 0;
+  border-top: 0.5px solid var(--border);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.proto li::before {
+  content: '';
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Findings */
+.findings-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.stat {
+  padding: 30px 0;
+  border-bottom: 0.5px solid var(--border);
+}
+.stat:first-child { padding-top: 0; }
+.stat:last-child { border-bottom: none; }
+.stat-row { display: flex; align-items: baseline; gap: 18px; margin-bottom: 4px; }
+.stat-notation {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+.stat-num {
+  font-family: var(--serif);
+  font-size: clamp(56px, 5vw, 76px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.stat-num em { font-style: italic; color: var(--accent); }
+.stat-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+.stat-sub {
+  font-size: 13.5px;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+/* Case file */
+.case-wrap {
+  background: var(--bg-alt);
+  border: 0.5px solid var(--border);
+  padding: 44px 44px 40px;
+  position: relative;
+}
+.case-head {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  text-transform: uppercase;
+  padding-bottom: 14px;
+  border-bottom: 0.5px solid var(--accent);
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+}
+.case-body { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; }
+.case-title {
+  font-family: var(--serif);
+  font-size: 34px;
+  color: var(--ink);
+  margin-bottom: 26px;
+  line-height: 1.15;
+  letter-spacing: -0.008em;
+  max-width: 95%;
+}
+.case-block { margin-bottom: 22px; }
+.case-key {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.case-text {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  line-height: 1.65;
+}
+
+/* Lab notes */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.note {
+  padding-top: 20px;
+  border-top: 1px solid var(--ink);
+  transition: border-color 0.3s ease;
+  cursor: pointer;
+}
+.note:hover { border-top-color: var(--accent); }
+.note:hover .note-title { color: var(--accent); }
+.note-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+}
+.note-title {
+  font-family: var(--serif);
+  font-size: 24px;
+  color: var(--ink);
+  margin-bottom: 14px;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  transition: color 0.3s ease;
+}
+.note-excerpt {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+.note-read {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+/* Peer review */
+.review-section { background: var(--bg-dark); padding: 110px 0; border-bottom: 0.5px solid var(--border); }
+.review-head {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 26px;
+  padding-bottom: 14px;
+  border-bottom: 0.5px solid var(--border);
+}
+.quote-mark {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 100px;
+  line-height: 0.5;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: block;
+}
+.quote {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.28;
+  color: var(--ink);
+  font-style: italic;
+  margin-bottom: 36px;
+  max-width: 820px;
+  letter-spacing: -0.008em;
+}
+.sig {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 22px;
+  border-top: 0.5px solid var(--border);
+}
+.sig-name {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-style: italic;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.sig-sub {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-top: 4px;
+  display: block;
+}
+.stamp {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stamp::before {
+  content: '';
+  width: 14px; height: 14px;
+  border: 0.5px solid var(--accent);
+  display: block;
+  position: relative;
+}
+
+/* CTA */
+.cta {
+  padding: 140px 56px;
+  text-align: center;
+  border-bottom: 0.5px solid var(--border);
+  max-width: 1320px;
+  margin: 0 auto;
+}
+.cta-eye {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 26px;
+}
+.cta h2 {
+  font-family: var(--serif);
+  font-size: clamp(48px, 6vw, 80px);
+  line-height: 1.04;
+  color: var(--ink);
+  margin-bottom: 22px;
+  letter-spacing: -0.018em;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.cta-sub {
+  font-size: 16px;
+  color: var(--ink-3);
+  max-width: 520px;
+  margin: 0 auto 36px;
+  line-height: 1.6;
+}
+
+/* Footer */
+.footer-top {
+  background: var(--bg-alt);
+  padding: 72px 56px 56px;
+  border-bottom: 0.5px solid var(--border);
+}
+.footer-top-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+.seal { width: 140px; height: 140px; }
+.footer-head {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.footer-top-inner ul { list-style: none; }
+.footer-top-inner li {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  padding: 5px 0;
+  letter-spacing: 0.01em;
+}
+.footer-top-inner a { color: inherit; text-decoration: none; border-bottom: 0.5px solid transparent; transition: border-color 0.3s ease; }
+.footer-top-inner a:hover { border-bottom-color: var(--accent); color: var(--accent); }
+
+.footer-bottom {
+  padding: 22px 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  background: var(--bg-dark);
+}
+.footer-bottom .c { text-align: center; }
+.footer-bottom .r { text-align: right; }
+
+/* Reveal */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+[data-reveal].in { opacity: 1; transform: translateY(0); }
+
+@keyframes pulse-node {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.25); }
+}
+.pulse { animation: pulse-node 2.8s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+
+/* Brain figure sizing */
+#brain-svg, #ring-svg { display: block; width: 100%; height: auto; }
+
+/* Mobile */
+@media (max-width: 900px) {
+  .container, .hero, .section-inner, .cta, .footer-top { padding-left: 28px; padding-right: 28px; }
+  .colophon, .nav, .footer-bottom { padding-left: 28px; padding-right: 28px; }
+  .hero { grid-template-columns: 1fr; gap: 56px; padding: 60px 28px 72px; }
+  .hero::before { display: none; }
+  .nav-links { display: none; }
+  .section { padding: 72px 0; }
+  .section-inner { grid-template-columns: 1fr; gap: 28px; }
+  .aside { position: static; }
+  .method-row { grid-template-columns: 50px 1fr; gap: 16px; }
+  .method-row .method-key { grid-column: 2; padding-top: 0; margin-bottom: 4px; }
+  .method-row .method-desc { grid-column: 2; }
+  .proto-grid { grid-template-columns: 1fr; }
+  .findings-grid { grid-template-columns: 1fr; gap: 40px; }
+  .case-body { grid-template-columns: 1fr; gap: 24px; }
+  .case-wrap { padding: 28px 24px; }
+  .notes-grid { grid-template-columns: 1fr; gap: 24px; }
+  .footer-top-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .seal { width: 100px; height: 100px; }
+  .footer-bottom { grid-template-columns: 1fr; gap: 6px; text-align: center; }
+  .footer-bottom .r, .footer-bottom .c { text-align: center; }
+  .colophon .center { display: none; }
+}
+
+/* === v3 additions: depth, color, and small editorial marks === */
+
+:root {
+  --red: #8B2C2C;
+  --red-bright: #A33838;
+  --dark-bg: #131E17;
+  --dark-surface: #1A2620;
+  --dark-accent: #8FC9A8;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 900px 600px at 12% 6%, rgba(31, 61, 46, 0.055), transparent 55%),
+    radial-gradient(ellipse 820px 520px at 88% 94%, rgba(139, 44, 44, 0.04), transparent 55%),
+    radial-gradient(ellipse 700px 500px at 50% 50%, rgba(200, 160, 80, 0.025), transparent 72%),
+    var(--bg);
+}
+
+/* Paper stack shadow on plates — two offset papers behind with soft drop */
+.plate {
+  box-shadow:
+    6px 6px 0 0 var(--bg-dark),
+    6px 6px 0 0.5px var(--border),
+    12px 12px 0 0 var(--bg-alt),
+    12px 12px 0 0.5px var(--border),
+    22px 28px 44px -16px rgba(24, 21, 17, 0.14);
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.plate:hover {
+  transform: perspective(1400px) translateY(-6px) rotateX(1.8deg) rotateY(-1.4deg);
+  box-shadow:
+    9px 9px 0 0 var(--bg-dark),
+    9px 9px 0 0.5px var(--border),
+    18px 18px 0 0 var(--bg-alt),
+    18px 18px 0 0.5px var(--border),
+    32px 40px 60px -16px rgba(24, 21, 17, 0.22);
+}
+
+/* 3D tilt on protocol cards */
+.proto:hover {
+  transform: perspective(1000px) translateY(-7px) rotateX(2deg) rotateY(-2.4deg);
+  box-shadow: 16px 22px 40px -16px rgba(24, 21, 17, 0.22);
+}
+
+/* 3D scroll reveal — page lifting toward you */
+[data-reveal] {
+  transform: perspective(1500px) rotateX(6deg) translateY(32px);
+  transform-origin: 50% 100%;
+  transition: opacity 1.1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+[data-reveal].in {
+  transform: perspective(1500px) rotateX(0) translateY(0);
+}
+
+/* Dark feature treatment for the peer review */
+.review-section {
+  background: var(--dark-bg);
+  background-image:
+    radial-gradient(ellipse 700px 450px at 78% 18%, rgba(31, 61, 46, 0.55), transparent 65%),
+    radial-gradient(ellipse 500px 320px at 15% 85%, rgba(139, 44, 44, 0.14), transparent 65%);
+  border-bottom-color: var(--dark-surface);
+  padding: 130px 0;
+}
+.review-section .aside-tag { color: var(--dark-accent); border-bottom-color: var(--dark-accent); }
+.review-section .aside-section-no { color: rgba(245, 240, 228, 0.45); }
+.review-section .aside-note { color: rgba(245, 240, 228, 0.7); border-top-color: rgba(245, 240, 228, 0.16); }
+.review-section .review-head { color: rgba(245, 240, 228, 0.55); border-bottom-color: rgba(245, 240, 228, 0.18); }
+.review-section .review-head span:first-child { color: var(--dark-accent); }
+.review-section .quote-mark { color: var(--dark-accent); }
+.review-section .quote { color: var(--bg); }
+.review-section .quote em { color: var(--dark-accent); }
+.review-section .sig { border-top-color: rgba(245, 240, 228, 0.18); }
+.review-section .sig-name { color: var(--bg); }
+.review-section .sig-sub { color: rgba(245, 240, 228, 0.5); }
+.review-section .stamp {
+  color: var(--red-bright);
+  border: 0.6px solid var(--red-bright);
+  padding: 8px 14px;
+  transform: rotate(-2.2deg);
+  letter-spacing: 0.18em;
+  background: rgba(163, 56, 56, 0.04);
+}
+.review-section .stamp::before {
+  content: '✓';
+  border: none;
+  background: transparent;
+  color: var(--red-bright);
+  font-size: 13px;
+  width: auto; height: auto;
+  font-family: var(--mono);
+  line-height: 1;
+}
+.review-section .aside-red-note { color: var(--red-bright); border-top-color: rgba(163, 56, 56, 0.3); }
+.review-section .aside-red-note::before { color: var(--red-bright); }
+
+/* Footer seal — slow rotation on the outer text ring */
+@keyframes seal-rotate { to { transform: rotate(360deg); } }
+.seal-rotating {
+  transform-origin: 50% 50%;
+  transform-box: view-box;
+  animation: seal-rotate 200s linear infinite;
+}
+
+/* Red editorial notes — marginalia in red ink */
+.aside-red-note {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12.5px;
+  color: var(--red);
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 0.5px dashed rgba(139, 44, 44, 0.35);
+  letter-spacing: 0.005em;
+  line-height: 1.45;
+}
+.aside-red-note::before {
+  content: '✱ ';
+  color: var(--red);
+  font-style: normal;
+  font-family: var(--mono);
+}
+
+/* Red rubber-stamp "Shipped on time" on the case file */
+.case-title-wrap { position: relative; padding-right: 148px; }
+.case-shipped {
+  position: absolute;
+  top: -6px;
+  right: 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--red);
+  border: 0.6px solid var(--red);
+  padding: 7px 12px;
+  transform: rotate(3.5deg);
+  text-transform: uppercase;
+  background: var(--bg);
+  z-index: 2;
+  white-space: nowrap;
+}
+.case-shipped::before {
+  content: '✓ ';
+  color: var(--red);
+}
+
+@media (max-width: 900px) {
+  .case-title-wrap { padding-right: 0; }
+  .case-shipped { position: static; display: inline-block; margin-top: 14px; transform: none; }
+}
+
+/* === v4 additions: ticker, translation canvas, instruments plate === */
+
+:root {
+  --amber: #BA7517;
+  --indigo: #2C4A7C;
+  --terracotta: #B8352C;
+}
+
+/* Lab-status ticker */
+.ticker {
+  background: var(--bg-dark);
+  border-bottom: 0.5px solid var(--border);
+  padding: 11px 0;
+  overflow: hidden;
+  position: relative;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--ink-2);
+  text-transform: uppercase;
+}
+.ticker::before, .ticker::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 90px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+.ticker::before { left: 0; background: linear-gradient(to right, var(--bg-dark), transparent); }
+.ticker::after  { right: 0; background: linear-gradient(to left, var(--bg-dark), transparent); }
+.ticker-track {
+  display: flex;
+  gap: 48px;
+  white-space: nowrap;
+  width: max-content;
+  animation: ticker-scroll 95s linear infinite;
+}
+.ticker-item { display: inline-flex; align-items: center; gap: 10px; }
+.ticker-dot {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: ticker-pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.ticker-item.red .ticker-dot { background: var(--red); animation-duration: 1.4s; }
+.ticker-item.amber .ticker-dot { background: var(--amber); }
+@keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes ticker-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+
+/* Translation section with canvas */
+.translation-section {
+  padding: 0;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg-alt);
+  overflow: hidden;
+}
+.translation-section > .section-inner { padding-top: 110px; padding-bottom: 40px; }
+.translation-wrap {
+  position: relative;
+  width: 100%;
+  height: 540px;
+  background: var(--bg);
+  border-top: 0.5px solid var(--border);
+  overflow: hidden;
+}
+.translation-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.translation-labels {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 28px 56px;
+  pointer-events: none;
+  z-index: 3;
+}
+.translation-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 240px;
+  background: rgba(245, 240, 228, 0.35);
+  backdrop-filter: blur(2px);
+  padding: 12px 14px;
+  border: 0.5px solid rgba(24, 21, 17, 0.08);
+}
+.translation-label.right {
+  text-align: right;
+  align-self: flex-end;
+  margin-top: auto;
+}
+.translation-label-tag {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.translation-label-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--ink);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
+.translation-label-text em { color: var(--accent); }
+
+/* Instruments plate */
+.instruments-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 8px;
+}
+.instrument-plate {
+  background: var(--bg-alt);
+  border: 0.5px solid var(--border);
+  padding: 16px 16px 14px;
+  position: relative;
+  box-shadow:
+    4px 4px 0 0 var(--bg-dark),
+    4px 4px 0 0.5px var(--border),
+    14px 18px 28px -12px rgba(24, 21, 17, 0.12);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.instrument-plate:hover {
+  transform: perspective(1200px) translateY(-5px) rotateX(1.4deg) rotateY(-1.2deg);
+  box-shadow:
+    6px 6px 0 0 var(--bg-dark),
+    6px 6px 0 0.5px var(--border),
+    22px 26px 36px -14px rgba(24, 21, 17, 0.2);
+}
+.instrument-head {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.15em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 0.5px dashed var(--border);
+}
+.instrument-head strong { color: var(--accent); font-weight: 500; }
+.instrument-body {
+  aspect-ratio: 14/9;
+  background: var(--bg);
+  border: 0.5px solid var(--border-soft);
+  overflow: hidden;
+  position: relative;
+}
+.instrument-body svg { display: block; width: 100%; height: 100%; }
+.instrument-caption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--ink-2);
+  margin-top: 10px;
+}
+.instrument-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--ink-4);
+  margin-top: 4px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Waveform horizontal scroll */
+.wave-scroll { animation: wave-scroll-anim 14s linear infinite; }
+@keyframes wave-scroll-anim { from { transform: translateX(0); } to { transform: translateX(-280px); } }
+
+@media (max-width: 900px) {
+  .translation-wrap { height: 420px; }
+  .translation-labels { padding: 18px 20px; }
+  .translation-label { max-width: 44%; padding: 9px 11px; }
+  .translation-label-text { font-size: 15px; }
+  .translation-label-tag { font-size: 8.5px; }
+  .instruments-grid { grid-template-columns: 1fr; gap: 18px; }
+  .ticker-track { animation-duration: 75s; gap: 32px; }
+  .ticker { font-size: 10px; letter-spacing: 0.1em; }
+}
+
+/* === v5 additions: agency presence, color moments, stronger CTAs === */
+
+:root {
+  --rose-bg: #F5E8DC;
+  --sage-bg: #E8EFE2;
+  --butter-bg: #F5EED3;
+  --indigo-bg: #DFE2EC;
+  --rose-accent: #9E3D2E;
+  --amber-rich: #B5751C;
+  --indigo-rich: #2E467C;
+  --accent-bright: #2C5440;
+}
+
+/* Override the abstract background so sections alternate in warm tones */
+#abstract { background: var(--rose-bg); border-bottom-color: #E8D6C2; }
+#abstract .aside-tag { color: var(--rose-accent); border-bottom-color: var(--rose-accent); }
+#abstract .section-title em,
+#abstract .abstract-body p.pull em { color: var(--rose-accent); }
+
+#findings { background: var(--sage-bg); border-bottom-color: #CEDCC4; }
+#findings .section-title em { color: var(--accent-bright); }
+#findings .stat-notation { color: var(--accent-bright); }
+#findings .stat-num em { color: var(--accent-bright); }
+#findings .aside-tag { color: var(--accent-bright); border-bottom-color: var(--accent-bright); }
+
+#instruments { background: var(--butter-bg); border-bottom-color: #E6DDB4; }
+#instruments .aside-tag { color: var(--amber-rich); border-bottom-color: var(--amber-rich); }
+#instruments .section-title em { color: var(--amber-rich); }
+#instruments .instrument-plate { background: #FBF6E2; }
+#instruments .instrument-body { background: #FBF6E2; }
+#instruments .instrument-plate svg rect[fill="#F5F0E4"] { fill: #FBF6E2; }
+
+/* Hero — bolder presence */
+.hero { padding-top: 80px; padding-bottom: 90px; align-items: center; }
+.hero h1 {
+  font-size: clamp(64px, 8.5vw, 120px);
+  letter-spacing: -0.028em;
+  margin-bottom: 28px;
+}
+.hero p.lede { font-size: 18.5px; line-height: 1.55; max-width: 480px; color: var(--ink); }
+.hero-eyebrow {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rose-accent);
+  background: rgba(158, 61, 46, 0.08);
+  padding: 6px 12px;
+  border-radius: 2px;
+  margin-bottom: 28px;
+}
+.hero-eyebrow::before {
+  content: '●';
+  color: var(--rose-accent);
+  margin-right: 8px;
+  font-size: 8px;
+  vertical-align: middle;
+  animation: ticker-pulse 2s ease-in-out infinite;
+}
+
+/* Trust bar under hero */
+.trust-bar {
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg-alt);
+  padding: 26px 56px;
+}
+.trust-bar-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.trust-label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.trust-logos {
+  display: flex;
+  gap: 52px;
+  align-items: center;
+  flex-wrap: wrap;
+  color: var(--ink-2);
+  font-family: var(--serif);
+  font-size: 19px;
+  font-style: italic;
+  letter-spacing: -0.005em;
+}
+.trust-logos span { opacity: 0.72; transition: opacity 0.3s ease; }
+.trust-logos span:hover { opacity: 1; }
+.trust-logos span::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+  margin-right: 10px;
+  opacity: 0.5;
+  vertical-align: middle;
+}
+
+/* Stronger buttons */
+.btn-primary {
+  padding: 14px 24px;
+  font-size: 12px;
+  background: var(--ink);
+  border-color: var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '→';
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+.btn-primary:hover::after { transform: translateX(4px); }
+.btn-primary:hover { background: var(--rose-accent); border-color: var(--rose-accent); }
+.btn-ghost { padding: 14px 24px; font-size: 12px; }
+.hero-ctas { gap: 14px; margin-top: 8px; }
+
+/* Slimmer marginalia — drop the running note, keep label */
+.aside { top: 120px; }
+.aside-tag { font-size: 11px; letter-spacing: 0.2em; margin-bottom: 8px; }
+.aside-note { display: none; }
+.aside-red-note { display: none; }
+
+/* Colored protocol cards */
+#protocols { background: linear-gradient(180deg, var(--bg) 0%, #EDE4D0 100%); }
+.proto-grid { gap: 18px; }
+.proto {
+  background: var(--bg-alt);
+  padding: 36px 28px 28px;
+  border: 0.5px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.proto::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--accent);
+  transition: height 0.35s ease;
+}
+.proto:nth-child(1)::before { background: var(--rose-accent); }
+.proto:nth-child(2)::before { background: var(--accent); }
+.proto:nth-child(3)::before { background: var(--amber-rich); }
+.proto:nth-child(1) .proto-tag,
+.proto:nth-child(1) .proto-code { color: var(--rose-accent); }
+.proto:nth-child(3) .proto-tag,
+.proto:nth-child(3) .proto-code { color: var(--amber-rich); }
+.proto:nth-child(1) li::before { background: var(--rose-accent); }
+.proto:nth-child(3) li::before { background: var(--amber-rich); }
+.proto:hover::before { height: 8px; }
+.proto:hover {
+  background: #FFFCF2;
+  border-color: rgba(24, 21, 17, 0.3);
+}
+.proto-price {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 0.5px solid var(--border);
+}
+.proto-price strong { color: var(--ink); font-weight: 500; font-family: var(--serif); font-style: italic; font-size: 16px; letter-spacing: -0.005em; text-transform: none; }
+
+/* Colored italic serif emphasis in hero, per-section */
+.hero h1 em { color: var(--rose-accent); }
+
+/* Remove the "§ I" pseudo corner mark */
+.hero::before { display: none; }
+
+/* Colophon — drop the Vol/No for agency feel, keep identity */
+.colophon .center { font-family: var(--serif); font-style: italic; letter-spacing: 0.01em; font-size: 12px; color: var(--ink-2); text-transform: none; }
+.colophon { padding: 8px 56px; font-size: 10px; }
+
+/* Logo sub — drop the Roman numerals */
+.logo-sub::after { content: attr(data-text); }
+
+/* Stronger CTA section */
+.cta { padding: 140px 56px 130px; }
+.cta h2 { font-size: clamp(56px, 7vw, 96px); letter-spacing: -0.022em; }
+.cta h2 em { color: var(--rose-accent); }
+.cta-eye { color: var(--rose-accent); }
+
+/* Review section subtle tweak — sage accent instead of green */
+.review-section .aside-tag { color: var(--dark-accent); border-bottom-color: var(--dark-accent); }
+
+/* Section titles — a bit more weight in size for agency feel */
+h2.section-title { font-size: clamp(40px, 5vw, 64px); }
+
+/* Methods section — subtle rose hint in italic desc titles */
+#methods .method-desc-title { color: var(--ink); }
+#methods .method-num { color: var(--rose-accent); }
+
+/* Lab notes — indigo accent */
+#notes-section .aside-tag { color: var(--indigo-rich); border-bottom-color: var(--indigo-rich); }
+#notes-section .section-title em { color: var(--indigo-rich); }
+#notes-section .note:hover { border-top-color: var(--indigo-rich); }
+#notes-section .note:hover .note-title { color: var(--indigo-rich); }
+#notes-section .note-read { color: var(--indigo-rich); }
+
+@media (max-width: 900px) {
+  .trust-bar { padding: 22px 28px; }
+  .trust-bar-inner { grid-template-columns: 1fr; gap: 16px; }
+  .trust-logos { gap: 28px; font-size: 15px; }
+  .colophon { padding: 8px 28px; }
+  .aside-tag { margin-bottom: 6px; }
+}
+</style>
+</head>
+<body>
+
+<div class="colophon">
+  <div>§ Lunaxa Labs</div>
+  <div class="center">An engineering laboratory for ambitious software.</div>
+  <div>Paris — San Francisco</div>
+</div>
+
+<div class="nav">
+  <div class="logo-block">
+    <div class="logo">Lunaxa <em>Labs</em></div>
+    <div class="logo-sub">Paris · San Francisco</div>
+  </div>
+  <nav class="nav-links">
+    <a href="#abstract">Abstract</a>
+    <a href="#methods">Methods</a>
+    <a href="#protocols">Protocols</a>
+    <a href="#findings">Findings</a>
+    <a href="#case">Case files</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a href="#contact" class="btn-primary">Start a project</a>
+</div>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="ticker-dot"></span>Lab status · 14 active engagements</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Protocol α · 6 cohorts</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Protocol β · 5 cohorts</span>
+    <span class="ticker-item amber"><span class="ticker-dot"></span>Protocol γ · 3 cohorts</span>
+    <span class="ticker-item red"><span class="ticker-dot"></span>Now reviewing · Case no. 007</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Operator network · 3,412</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Last ship · Fintech, 5 months</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Next peer review · 02/26</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Uptime (Q1) · 99.97%</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Lab status · 14 active engagements</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Protocol α · 6 cohorts</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Protocol β · 5 cohorts</span>
+    <span class="ticker-item amber"><span class="ticker-dot"></span>Protocol γ · 3 cohorts</span>
+    <span class="ticker-item red"><span class="ticker-dot"></span>Now reviewing · Case no. 007</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Operator network · 3,412</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Last ship · Fintech, 5 months</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Next peer review · 02/26</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Uptime (Q1) · 99.97%</span>
+  </div>
+</div>
+
+<section class="hero">
+  <div data-reveal>
+    <div class="hero-eyebrow">Now taking projects for Q3 2026</div>
+    <h1>Software, <em>shipped</em>. On time. Every time.</h1>
+    <p class="lede">Lunaxa Labs matches elite engineers to your project in days, not months. We've delivered 47 engagements across fintech, health, and frontier infrastructure — every one on time and on budget.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary">Start a project</a>
+      <a href="#case" class="btn-ghost">See our work</a>
+    </div>
+  </div>
+
+  <div class="plate plate-corners plate-corners-b" data-reveal style="transition-delay: 0.2s;">
+    <div class="plate-head">
+      <div>Plate I</div>
+      <div><strong>Fig. 01</strong></div>
+    </div>
+    <svg id="brain-svg" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 65 95 C 72 55, 122 38, 172 44 C 224 50, 260 78, 258 122 C 256 148, 244 170, 228 184 C 246 194, 252 214, 236 228 C 220 238, 192 236, 178 224 C 174 244, 160 252, 148 248 C 144 262, 139 268, 134 265 C 132 258, 134 252, 132 245 C 108 248, 82 232, 67 208 C 52 182, 50 150, 59 125 Z" fill="#1F3D2E" fill-opacity="0.035" stroke="#1F3D2E" stroke-opacity="0.22" stroke-width="0.6" stroke-dasharray="2,3"/>
+      <g class="edges" stroke="#1F3D2E" stroke-width="0.4" stroke-opacity="0.32" fill="none"></g>
+      <g class="nodes" fill="#181511"></g>
+      <g class="hubs" fill="#1F3D2E"></g>
+      <g class="rings" fill="none" stroke="#1F3D2E" stroke-width="0.5"></g>
+      <g class="labels"></g>
+    </svg>
+    <p class="plate-caption">Observed connection topology in a distributed engineering network. Hubs indicate cross-domain operators; labels mark functional regions.</p>
+    <div class="plate-legend">
+      <div><span>I</span> · Systems</div>
+      <div><span>II</span> · Interface</div>
+      <div><span>III</span> · Data</div>
+      <div><span>IV</span> · Language</div>
+      <div><span>V</span> · Runtime</div>
+      <div><span>n</span> = 3,412</div>
+    </div>
+    <div class="scalebar">100 operators</div>
+  </div>
+</section>
+
+<div class="trust-bar" data-reveal>
+  <div class="trust-bar-inner">
+    <div class="trust-label">Trusted by teams at</div>
+    <div class="trust-logos">
+      <span>Axiom Capital</span>
+      <span>Meridian Health</span>
+      <span>Northwind</span>
+      <span>Parallax</span>
+      <span>Vessel</span>
+      <span>Ironclad</span>
+    </div>
+  </div>
+</div>
+
+<section class="section" id="abstract">
+  <div class="section-inner">
+    <div class="aside" data-reveal>
+      <span class="aside-tag">§ 01 / Abstract</span>
+      <span class="aside-section-no">— 001</span>
+      <p class="aside-note">The protocol of a research laboratory, applied to software engagements that cannot afford to fail.</p>
+      <p class="aside-red-note">n.b. see fig. 01 for operator topology.</p>
+    </div>
+    <div data-reveal style="transition-delay: 0.1s;">
+      <h2 class="section-title">We don't staff projects. We <em>build teams.</em></h2>
+      <div class="abstract-body">
+        <p>Most agencies solve for headcount — bodies in seats, billable hours, generic pods. We solve for composition. Every engagement starts with understanding the shape of your problem, then assembling the specific team that will deliver it.</p>
+        <p class="pull">The right team, matched to the right problem, will outperform a larger team hired on <em>résumé alone.</em></p>
+        <p>This is why 99% of our work ships on time. It's also why our clients come back. Every project is documented in full — so you know what you're buying, and you know what you got.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section translation-section" id="translation">
+  <div class="section-inner">
+    <div class="aside" data-reveal>
+      <span class="aside-tag">§ 02 / Translation</span>
+      <span class="aside-section-no">— 002</span>
+      <p class="aside-note">Signal transduction, observed. Neurons firing, patterns becoming code.</p>
+    </div>
+    <div data-reveal style="transition-delay: 0.1s;">
+      <h2 class="section-title">From <em>cortex</em> to code.</h2>
+      <p class="section-lede">Every software system begins as a pattern of activation in someone's mind. We watch the translation happen, and build tools that compress the distance.</p>
+    </div>
+  </div>
+
+  <div class="translation-wrap">
+    <canvas class="translation-canvas" id="translation-canvas"></canvas>
+    <div class="translation-labels">
+      <div class="translation-label">
+        <span class="translation-label-tag">— Plate III / Fig. 08a</span>
+        <span class="translation-label-text">The <em>biological</em> system, observed.</span>
+      </div>
+      <div class="translation-label right">
+        <span class="translation-label-tag">— Fig. 08b / continues</span>
+        <span class="translation-label-text">The <em>computational</em> system, emerging.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="methods">
+  <div class="section-inner">
+    <div class="aside" data-reveal>
+      <span class="aside-tag">§ 03 / Methods</span>
+      <span class="aside-section-no">— 003</span>
+      <p class="aside-note">Four phases, executed in strict sequence. Deviation triggers review.</p>
+    </div>
+    <div data-reveal style="transition-delay: 0.1s;">
+      <h2 class="section-title">The laboratory <em>protocol</em>.</h2>
+      <p class="section-lede">No templates — each project is scoped to its own constraints before assembly begins. The sequence is consistent; the composition is not.</p>
+      <div>
+        <div class="method-row">
+          <div class="method-num">01</div>
+          <div class="method-key">Observation</div>
+          <div class="method-desc">
+            <div class="method-desc-title">Scope the system.</div>
+            <div class="method-desc-body">Constraints, architecture, and failure modes are documented before a line of code is written. Stakeholder interviews produce a project signature.</div>
+          </div>
+        </div>
+        <div class="method-row">
+          <div class="method-num">02</div>
+          <div class="method-key">Assembly</div>
+          <div class="method-desc">
+            <div class="method-desc-title">Match the team.</div>
+            <div class="method-desc-body">Our network of 3,400+ operators is filtered by project signature. Composition is optimised against prior outcomes — not titles, not résumés.</div>
+          </div>
+        </div>
+        <div class="method-row">
+          <div class="method-num">03</div>
+          <div class="method-key">Iteration</div>
+          <div class="method-desc">
+            <div class="method-desc-title">Run the experiment.</div>
+            <div class="method-desc-body">Tight cycles, daily visibility, and engineering leadership that holds the line on architectural decisions. Drift is flagged within 24 hours.</div>
+          </div>
+        </div>
+        <div class="method-row">
+          <div class="method-num">04</div>
+          <div class="method-key">Delivery</div>
+          <div class="method-desc">
+            <div class="method-desc-title">Report the result.</div>
+            <div class="method-desc-body">Rigorous acceptance testing, measurable outcomes, documented handoff — or continued operation under one of our standing protocols.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="protocols">
+  <div class="section-inner">
+    <div class="aside" data-reveal>
+      <span class="aside-tag">§ 04 / Protocols</span>
+      <span class="aside-section-no">— 004</span>
+      <p class="aside-note">Three standing engagement protocols. Select by ownership model, not by price.</p>
+    </div>
+    <div data-reveal style="transition-delay: 0.1s;">
+      <h2 class="section-title">Three standing <em>engagement</em> protocols.</h2>
+      <p class="section-lede">Each protocol describes a different relationship between our laboratory and your organisation.</p>
+      <div class="proto-grid">
+        <div class="proto">
+          <div class="proto-tag">Protocol α</div>
+          <span class="proto-code">α</span>
+          <h3 class="proto-title">Full engagement.</h3>
+          <p class="proto-desc">We own the entire software lifecycle and deliver a product to specification.</p>
+          <ul>
+            <li>Full ownership</li>
+            <li>Architectural lead</li>
+            <li>Maintenance</li>
+            <li>Acceptance</li>
+          </ul>
+        </div>
+        <div class="proto">
+          <div class="proto-tag">Protocol β</div>
+          <span class="proto-code">β</span>
+          <h3 class="proto-title">Embedded team.</h3>
+          <p class="proto-desc">A dedicated cohort embedded in your organisation, reporting into your systems.</p>
+          <ul>
+            <li>Exclusive allocation</li>
+            <li>Flexible scaling</li>
+            <li>Your workflows</li>
+            <li>Direct communication</li>
+          </ul>
+        </div>
+        <div class="proto">
+          <div class="proto-tag">Protocol γ</div>
+          <span class="proto-code">γ</span>
+          <h3 class="proto-title">Specialist cohort.</h3>
+          <p class="proto-desc">Targeted expertise for bounded work — audits, accelerations, domain specialists.</p>
+          <ul>
+            <li>Rapid deploy</li>
+            <li>Deep specialism</li>
+            <li>Bounded scope</li>
+            <li>Cost-efficient</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="findings">
+  <div class="section-inner">
+    <div class="aside" data-reveal>
+      <span class="aside-tag">§ 05 / Findings</span>
+      <span class="aside-section-no">— 005</span>
+      <p class="aside-note">Aggregated across 47 completed engagements. Figures are medians unless noted.</p>
+    </div>
+    <div data-reveal style="transition-delay: 0.1s;">
+      <h2 class="section-title">Observed <em>outcomes.</em></h2>
+      <p class="section-lede">Measured against traditional hiring and delivery baselines.</p>
+      <div class="findings-grid">
+        <div>
+          <div class="stat">
+            <div class="stat-row">
+              <span class="stat-notation">n =</span>
+              <span class="stat-num">16.6<em>×</em></span>
+            </div>
+            <div class="stat-label">Faster delivery</div>
+            <div class="stat-sub">median, vs. traditional hiring baseline</div>
+          </div>
+          <div class="stat">
+            <div class="stat-row">
+              <span class="stat-notation">σ =</span>
+              <span class="stat-num">99<em>%</em></span>
+            </div>
+            <div class="stat-label">Talent retention</div>
+            <div class="stat-sub">operator match quality, top-percentile</div>
+          </div>
+          <div class="stat">
+            <div class="stat-row">
+              <span class="stat-notation">p &lt;</span>
+              <span class="stat-num">0<em>.01</em></span>
+            </div>
+            <div class="stat-label">On-time, on-budget</div>
+            <div class="stat-sub">outcome significance across cohort</div>
+          </div>
+        </div>
+        <div class="plate plate-corners plate-corners-b">
+          <div class="plate-head">
+            <div>Plate II</div>
+            <div><strong>Fig. 02</strong></div>
+          </div>
+          <svg id="ring-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="110" cy="110" r="88" fill="none" stroke="#D8CEB9" stroke-width="0.5"/>
+            <circle cx="110" cy="110" r="78" fill="none" stroke="#D8CEB9" stroke-width="0.5" stroke-dasharray="1,3"/>
+            <g class="ring-chords" stroke="#1F3D2E" stroke-width="0.5" stroke-opacity="0.32" fill="none"></g>
+            <g class="ring-nodes" fill="#181511"></g>
+            <g class="ring-ticks" stroke="#181511" stroke-width="0.5"></g>
+          </svg>
+          <p class="plate-caption">Cross-project operator re-engagement network. Chords denote shared assignments across case files.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="instruments">
+  <div class="section-inner">
+    <div class="aside" data-reveal>
+      <span class="aside-tag">§ 06 / Instruments</span>
+      <span class="aside-section-no">— 006</span>
+      <p class="aside-note">How we observe, measure, and report. A representative plate from the archive.</p>
+    </div>
+    <div data-reveal style="transition-delay: 0.1s;">
+      <h2 class="section-title">The <em>instruments.</em></h2>
+      <p class="section-lede">A sample of the figures produced per engagement. Each case file ships with a full visualisation plate — these are excerpts.</p>
+
+      <div class="instruments-grid">
+
+        <div class="instrument-plate">
+          <div class="instrument-head"><div>Plate IV</div><div><strong>Fig. 04</strong></div></div>
+          <div class="instrument-body">
+            <svg viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="280" height="180" fill="#F5F0E4"/>
+              <g stroke-linecap="round" fill="none">
+                <path d="M 15 78 Q 70 68 140 72 Q 210 76 265 82" stroke="#B8352C" stroke-width="1.9" opacity="0.82"/>
+                <path d="M 18 92 Q 75 82 140 88 Q 205 92 262 98" stroke="#C94538" stroke-width="1.4" opacity="0.78"/>
+                <path d="M 22 106 Q 80 96 140 100 Q 200 104 258 110" stroke="#A82B25" stroke-width="1.3" opacity="0.8"/>
+                <path d="M 16 120 Q 70 112 140 116 Q 210 120 266 126" stroke="#D8584C" stroke-width="1.1" opacity="0.72"/>
+                <path d="M 24 134 Q 85 126 140 130 Q 195 134 254 140" stroke="#B8352C" stroke-width="1.5" opacity="0.78"/>
+                <path d="M 65 18 Q 70 80 74 162" stroke="#4A7C3A" stroke-width="1.7" opacity="0.82"/>
+                <path d="M 100 15 Q 104 82 108 165" stroke="#5E8F46" stroke-width="1.4" opacity="0.78"/>
+                <path d="M 140 12 Q 143 88 147 168" stroke="#3F6B2F" stroke-width="1.8" opacity="0.85"/>
+                <path d="M 178 15 Q 180 85 184 165" stroke="#5E8F46" stroke-width="1.3" opacity="0.75"/>
+                <path d="M 213 18 Q 214 82 218 162" stroke="#4A7C3A" stroke-width="1.5" opacity="0.8"/>
+                <path d="M 48 25 Q 88 75 128 128" stroke="#2C4A7C" stroke-width="1.4" opacity="0.78"/>
+                <path d="M 82 22 Q 122 78 162 135" stroke="#3A5A8F" stroke-width="1.2" opacity="0.72"/>
+                <path d="M 158 22 Q 182 78 202 135" stroke="#2C4A7C" stroke-width="1.3" opacity="0.76"/>
+                <path d="M 198 25 Q 220 82 232 145" stroke="#3A5A8F" stroke-width="1.1" opacity="0.7"/>
+                <path d="M 35 45 Q 100 65 165 55 Q 225 45 262 65" stroke="#C94538" stroke-width="0.8" opacity="0.5"/>
+                <path d="M 40 150 Q 110 138 170 152 Q 225 166 260 160" stroke="#B8352C" stroke-width="0.9" opacity="0.55"/>
+                <path d="M 30 60 Q 80 110 140 90 Q 200 72 255 115" stroke="#4A7C3A" stroke-width="0.7" opacity="0.48"/>
+              </g>
+              <text x="10" y="175" font-family="IBM Plex Mono, monospace" font-size="7" fill="#6B6055" letter-spacing="0.5">DIRECTIONAL · RGB</text>
+              <text x="270" y="175" font-family="IBM Plex Mono, monospace" font-size="7" fill="#6B6055" letter-spacing="0.5" text-anchor="end">LR · AP · SI</text>
+            </svg>
+          </div>
+          <p class="instrument-caption">Operator specialisation fibre tracts. Colour denotes domain vector.</p>
+          <div class="instrument-meta"><span>n = 847 · tractography</span><span>↗ archive</span></div>
+        </div>
+
+        <div class="instrument-plate">
+          <div class="instrument-head"><div>Plate V</div><div><strong>Fig. 05</strong></div></div>
+          <div class="instrument-body">
+            <svg id="matrix-svg" viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="200" height="180" fill="#F5F0E4"/>
+              <g id="matrix-cells"></g>
+            </svg>
+          </div>
+          <p class="instrument-caption">Inter-protocol correlation. Diagonal blocks mark shared operator pools.</p>
+          <div class="instrument-meta"><span>14 × 14 · all engagements</span><span>cool → warm</span></div>
+        </div>
+
+        <div class="instrument-plate">
+          <div class="instrument-head"><div>Plate VI</div><div><strong>Fig. 06</strong></div></div>
+          <div class="instrument-body">
+            <svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="240" height="180" fill="#F5F0E4"/>
+              <defs>
+                <radialGradient id="h-red">
+                  <stop offset="0%" stop-color="#E06850" stop-opacity="0.92"/>
+                  <stop offset="50%" stop-color="#C94538" stop-opacity="0.5"/>
+                  <stop offset="100%" stop-color="#B8352C" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="h-warm">
+                  <stop offset="0%" stop-color="#F0A04A" stop-opacity="0.85"/>
+                  <stop offset="60%" stop-color="#E0803A" stop-opacity="0.32"/>
+                  <stop offset="100%" stop-color="#D0602A" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="h-cool">
+                  <stop offset="0%" stop-color="#3A5A8F" stop-opacity="0.72"/>
+                  <stop offset="100%" stop-color="#2C4A7C" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <ellipse cx="120" cy="92" rx="98" ry="72" fill="#EEE8DA" stroke="#181511" stroke-width="0.7"/>
+              <ellipse cx="120" cy="92" rx="98" ry="72" fill="none" stroke="#181511" stroke-width="0.4" stroke-dasharray="2,3" opacity="0.4"/>
+              <line x1="120" y1="22" x2="120" y2="162" stroke="#181511" stroke-width="0.3" stroke-dasharray="1,2"/>
+              <circle cx="76" cy="72" r="30" fill="url(#h-red)"/>
+              <circle cx="158" cy="80" r="36" fill="url(#h-red)"/>
+              <circle cx="102" cy="118" r="24" fill="url(#h-warm)"/>
+              <circle cx="172" cy="130" r="20" fill="url(#h-warm)"/>
+              <circle cx="58" cy="125" r="16" fill="url(#h-cool)"/>
+              <circle cx="195" cy="60" r="12" fill="url(#h-cool)"/>
+              <g font-family="IBM Plex Mono, monospace" font-size="7" fill="#181511" letter-spacing="0.5">
+                <text x="76" y="36" text-anchor="middle">PFC</text>
+                <line x1="76" y1="39" x2="76" y2="56" stroke="#181511" stroke-width="0.4"/>
+                <text x="158" y="36" text-anchor="middle">LIN</text>
+                <line x1="158" y1="39" x2="158" y2="60" stroke="#181511" stroke-width="0.4"/>
+                <text x="172" y="160" text-anchor="middle">TEM</text>
+                <line x1="172" y1="150" x2="172" y2="145" stroke="#181511" stroke-width="0.4"/>
+              </g>
+              <text x="10" y="175" font-family="IBM Plex Mono, monospace" font-size="7" fill="#6B6055" letter-spacing="0.5">AXIAL · z = 0</text>
+              <text x="230" y="175" font-family="IBM Plex Mono, monospace" font-size="7" fill="#6B6055" letter-spacing="0.5" text-anchor="end">p &lt; 0.001</text>
+            </svg>
+          </div>
+          <p class="instrument-caption">Activation density across problem-space regions. Mean over the archive.</p>
+          <div class="instrument-meta"><span>n = 47 · axial view</span><span>cluster-corrected</span></div>
+        </div>
+
+        <div class="instrument-plate">
+          <div class="instrument-head"><div>Plate VII</div><div><strong>Fig. 07</strong></div></div>
+          <div class="instrument-body">
+            <svg viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">
+              <rect width="280" height="180" fill="#F5F0E4"/>
+              <g id="waveform-paths" class="wave-scroll"></g>
+              <line x1="0" y1="158" x2="280" y2="158" stroke="#181511" stroke-width="0.4"/>
+              <g font-family="IBM Plex Mono, monospace" font-size="6.5" fill="#6B6055" letter-spacing="0.4">
+                <text x="6" y="22">α · 8–12 Hz</text>
+                <text x="6" y="58">β · 13–30 Hz</text>
+                <text x="6" y="95">γ · 30–80 Hz</text>
+                <text x="6" y="130">signal</text>
+              </g>
+              <g font-family="IBM Plex Mono, monospace" font-size="6.5" fill="#6B6055">
+                <text x="8" y="172">t₀</text>
+                <text x="90" y="172">t₁</text>
+                <text x="175" y="172">t₂</text>
+                <text x="260" y="172" text-anchor="end">t₃</text>
+              </g>
+            </svg>
+          </div>
+          <p class="instrument-caption">Live engagement signal. Bands indicate α / β / γ protocol activity.</p>
+          <div class="instrument-meta"><span>live feed · 14 engagements</span><span>→ running</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="case">
+  <div class="section-inner">
+    <div class="aside" data-reveal>
+      <span class="aside-tag">§ 07 / Case file</span>
+      <span class="aside-section-no">— 007</span>
+      <p class="aside-note">Case files are archived with full methods and results. Excerpt shown.</p>
+    </div>
+    <div data-reveal style="transition-delay: 0.1s;">
+      <h2 class="section-title">Case file <em>no. 001</em>.</h2>
+      <p class="section-lede">A tier-1 fintech infrastructure rebuild, concluded March 2025.</p>
+
+      <div class="case-wrap">
+        <div class="case-head"><span>Case no. 001 · Fintech · 2025</span><span>Protocol α → β</span></div>
+        <div class="case-title-wrap">
+          <h3 class="case-title">A 30-engineer infrastructure rebuild, delivered ahead of a Series C.</h3>
+          <div class="case-shipped">Shipped on time</div>
+        </div>
+        <div class="case-body">
+          <div>
+            <div class="case-block">
+              <div class="case-key">Abstract</div>
+              <p class="case-text">A tier-1 fintech required a complete infrastructure rebuild prior to a Series C round. Traditional hiring projected 14 months. Risk was rated significant.</p>
+            </div>
+            <div class="case-block">
+              <div class="case-key">Methods</div>
+              <p class="case-text">Protocol α. Thirty operators matched from network in 18 days. Daily visibility, weekly demos, fortnightly stakeholder sync.</p>
+            </div>
+            <div class="case-block">
+              <div class="case-key">Result</div>
+              <p class="case-text">Shipped in 5 months. Zero regressions at launch, 99.97% uptime. Client retained team under Protocol β for ongoing operation.</p>
+            </div>
+          </div>
+          <div class="plate plate-corners plate-corners-b" style="margin-top: 6px;">
+            <div class="plate-head"><div>Duration</div><div><strong>Fig. 03</strong></div></div>
+            <svg viewBox="0 0 280 120" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:auto">
+              <text x="0" y="22" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B6055" letter-spacing="0.5">PROJECTED</text>
+              <rect x="0" y="30" width="252" height="10" fill="#D8CEB9"/>
+              <text x="258" y="39" font-family="IBM Plex Mono, monospace" font-size="10" fill="#181511">14 mo</text>
+              <text x="0" y="60" font-family="IBM Plex Mono, monospace" font-size="9" fill="#6B6055" letter-spacing="0.5">ACTUAL</text>
+              <rect x="0" y="68" width="90" height="10" fill="#1F3D2E"/>
+              <text x="96" y="77" font-family="IBM Plex Mono, monospace" font-size="10" fill="#1F3D2E">5 mo</text>
+              <line x1="0" y1="95" x2="270" y2="95" stroke="#181511" stroke-width="0.5"/>
+              <g font-family="IBM Plex Mono, monospace" font-size="8" fill="#9E9489">
+                <line x1="0" y1="95" x2="0" y2="99" stroke="#181511" stroke-width="0.5"/><text x="0" y="110">0</text>
+                <line x1="90" y1="95" x2="90" y2="99" stroke="#181511" stroke-width="0.5"/><text x="87" y="110">5</text>
+                <line x1="180" y1="95" x2="180" y2="99" stroke="#181511" stroke-width="0.5"/><text x="174" y="110">10</text>
+                <line x1="252" y1="95" x2="252" y2="99" stroke="#181511" stroke-width="0.5"/><text x="246" y="110">14</text>
+                <text x="125" y="118" font-style="italic" fill="#6B6055">months from kick-off</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="notes-section">
+  <div class="section-inner">
+    <div class="aside" data-reveal>
+      <span class="aside-tag">§ 08 / Lab notes</span>
+      <span class="aside-section-no">— 008</span>
+      <p class="aside-note">Writing from the laboratory on method, tooling, and recent work.</p>
+    </div>
+    <div data-reveal style="transition-delay: 0.1s;">
+      <h2 class="section-title">Recent from the <em>laboratory.</em></h2>
+      <p class="section-lede">Essays, postmortems, and technical notes. Published monthly.</p>
+      <div class="notes-grid">
+        <article class="note">
+          <div class="note-meta"><span>No. 014</span><span>March 2026</span></div>
+          <h3 class="note-title">On matching teams to problem signatures.</h3>
+          <p class="note-excerpt">A short essay on why résumés fail as matching features, and what our network uses instead.</p>
+          <div class="note-read">Read →</div>
+        </article>
+        <article class="note">
+          <div class="note-meta"><span>No. 013</span><span>February 2026</span></div>
+          <h3 class="note-title">Postmortem of a 5-month ship.</h3>
+          <p class="note-excerpt">Technical reflection on the fintech rebuild: what worked, what we would change, and the numbers.</p>
+          <div class="note-read">Read →</div>
+        </article>
+        <article class="note">
+          <div class="note-meta"><span>No. 012</span><span>January 2026</span></div>
+          <h3 class="note-title">The cost of context loss.</h3>
+          <p class="note-excerpt">Why embedded cohorts outperform rotating contractors, with measured delivery data from our archive.</p>
+          <div class="note-read">Read →</div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="review-section">
+  <div class="section-inner">
+    <div class="aside" data-reveal>
+      <span class="aside-tag">§ 09 / Peer review</span>
+      <span class="aside-section-no">— 009</span>
+      <p class="aside-note">External assessment. Signed and verified.</p>
+    </div>
+    <div data-reveal style="transition-delay: 0.1s;">
+      <div class="review-head"><span>Peer review · Engagement no. 001</span><span>Signed 02 / 2026</span></div>
+      <span class="quote-mark">"</span>
+      <p class="quote">The speed and quality of delivery was <em>remarkable</em>. What we projected at eight months shipped in four — and the product was exactly what we specified.</p>
+      <div class="sig">
+        <div>
+          <div class="sig-name">Marcus Rodriguez</div>
+          <span class="sig-sub">Director of product · Fintech, NYC</span>
+        </div>
+        <div class="stamp">Verified engagement</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div data-reveal>
+    <div class="cta-eye">Ready when you are</div>
+    <h2>Let's ship <em>something</em> ambitious.</h2>
+    <p class="cta-sub">Tell us about your project. We'll get back within two business days with a proposed approach, team, and timeline — no sales process, no slide deck.</p>
+    <div class="hero-ctas" style="justify-content: center;">
+      <a href="mailto:lunaxa.labs@gmail.com" class="btn-primary">Start a project</a>
+      <a href="mailto:lunaxa.labs@gmail.com" class="btn-ghost">Book a call</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-top-inner">
+      <div>
+        <svg class="seal" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <path id="ctop" d="M 30 80 A 50 50 0 0 1 130 80"/>
+            <path id="cbot" d="M 30 80 A 50 50 0 0 0 130 80"/>
+          </defs>
+          <circle cx="80" cy="80" r="62" fill="none" stroke="#1F3D2E" stroke-width="0.6"/>
+          <circle cx="80" cy="80" r="56" fill="none" stroke="#1F3D2E" stroke-width="0.4" stroke-dasharray="1,2"/>
+          <g class="seal-rotating">
+            <text font-family="IBM Plex Mono, monospace" font-size="7" letter-spacing="4" fill="#1F3D2E">
+              <textPath href="#ctop" startOffset="50%" text-anchor="middle">LUNAXA · LABORATORIES</textPath>
+            </text>
+            <text font-family="IBM Plex Mono, monospace" font-size="7" letter-spacing="4" fill="#1F3D2E">
+              <textPath href="#cbot" startOffset="50%" text-anchor="middle">EST · MMXXV · PARIS · SF</textPath>
+            </text>
+          </g>
+          <text x="80" y="95" text-anchor="middle" font-family="Instrument Serif, serif" font-style="italic" font-size="44" fill="#1F3D2E">L</text>
+        </svg>
+      </div>
+      <div>
+        <div class="footer-head">Research</div>
+        <ul>
+          <li><a href="#abstract">Abstract</a></li>
+          <li><a href="#methods">Methods</a></li>
+          <li><a href="#protocols">Protocols</a></li>
+          <li><a href="#findings">Findings</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-head">Archive</div>
+        <ul>
+          <li><a href="#case">Case files</a></li>
+          <li><a href="#">Lab notes</a></li>
+          <li><a href="#">Publications</a></li>
+          <li><a href="#">Bibliography</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-head">Contact</div>
+        <ul>
+          <li><a href="mailto:lunaxa.labs@gmail.com">lunaxa.labs@gmail.com</a></li>
+          <li>Paris · France</li>
+          <li>San Francisco · CA</li>
+          <li><a href="#contact">Start a project →</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>§ Lunaxa Labs · © MMXXVI</div>
+    <div class="c">Vol. 01 · No. 003 · April 2026</div>
+    <div class="r">Privacy · Terms</div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var svgNs = 'http://www.w3.org/2000/svg';
+
+  // Brain connectome
+  var brain = document.getElementById('brain-svg');
+  if (brain) {
+    var nodes = [
+      [70,88],[84,72],[100,58],[136,52],[152,54],
+      [78,108],[93,92],[112,82],[128,76],[146,78],
+      [88,132],[106,118],[123,110],[168,48],[188,50],
+      [208,58],[220,72],[160,72],[180,74],[200,82],
+      [218,95],[165,98],[184,98],[204,102],[230,82],
+      [244,96],[252,118],[250,140],[240,158],[218,114],
+      [232,128],[242,140],[228,155],[84,150],[104,145],
+      [126,140],[146,138],[166,140],[188,138],[208,138],
+      [94,175],[115,170],[136,165],[176,160],[198,160],
+      [98,200],[122,205],[145,200],[168,195],[190,188],
+      [210,193],[216,186],[232,192],[248,198],[254,218],
+      [242,235],[222,222],[235,216],[150,200],[153,225],
+      [158,250]
+    ];
+    var hubs = [
+      [136,52,5,0],[188,50,5,0.7],[230,128,5.5,1.4],[156,118,6,2.1],[232,216,5,2.8]
+    ];
+    var labels = [
+      [50,40,'I'],[178,25,'II'],[285,108,'III'],[50,170,'IV'],[272,250,'V']
+    ];
+    var leads = [
+      [58,44,95,62],[184,30,160,50],[278,110,246,120],[58,172,90,155],[268,245,238,215]
+    ];
+    var all = nodes.concat(hubs.map(function(h){ return [h[0],h[1]]; }));
+    var edges = brain.querySelector('.edges');
+    var nodesG = brain.querySelector('.nodes');
+    var hubsG = brain.querySelector('.hubs');
+    var ringsG = brain.querySelector('.rings');
+    var labelsG = brain.querySelector('.labels');
+
+    for (var i = 0; i < all.length; i++) {
+      for (var j = i+1; j < all.length; j++) {
+        var dx = all[i][0]-all[j][0], dy = all[i][1]-all[j][1];
+        var d = Math.sqrt(dx*dx+dy*dy);
+        if (d < 30) {
+          var l = document.createElementNS(svgNs, 'line');
+          l.setAttribute('x1', all[i][0]); l.setAttribute('y1', all[i][1]);
+          l.setAttribute('x2', all[j][0]); l.setAttribute('y2', all[j][1]);
+          if (d < 18) { l.setAttribute('stroke-opacity', '0.52'); l.setAttribute('stroke-width', '0.5'); }
+          edges.appendChild(l);
+        }
+      }
+    }
+    var longRange = [
+      [136,52,156,118],[188,50,156,118],[230,128,156,118],
+      [156,118,232,216],[100,58,136,52],[208,58,188,50],
+      [230,128,240,158],[106,118,146,138],[188,50,218,95],
+      [156,118,146,138],[230,128,208,138]
+    ];
+    longRange.forEach(function(e) {
+      var l = document.createElementNS(svgNs, 'line');
+      l.setAttribute('x1', e[0]); l.setAttribute('y1', e[1]);
+      l.setAttribute('x2', e[2]); l.setAttribute('y2', e[3]);
+      l.setAttribute('stroke-opacity', '0.22'); l.setAttribute('stroke-width', '0.35');
+      edges.appendChild(l);
+    });
+    nodes.forEach(function(n) {
+      var c = document.createElementNS(svgNs, 'circle');
+      c.setAttribute('cx', n[0]); c.setAttribute('cy', n[1]); c.setAttribute('r', 2.6);
+      nodesG.appendChild(c);
+    });
+    hubs.forEach(function(h) {
+      var c = document.createElementNS(svgNs, 'circle');
+      c.setAttribute('cx', h[0]); c.setAttribute('cy', h[1]); c.setAttribute('r', h[2]);
+      c.setAttribute('class', 'pulse');
+      c.style.animationDelay = h[3] + 's';
+      hubsG.appendChild(c);
+      var r = document.createElementNS(svgNs, 'circle');
+      r.setAttribute('cx', h[0]); r.setAttribute('cy', h[1]); r.setAttribute('r', h[2]+6);
+      r.setAttribute('stroke-opacity', '0.3');
+      ringsG.appendChild(r);
+    });
+    leads.forEach(function(e) {
+      var l = document.createElementNS(svgNs, 'line');
+      l.setAttribute('x1', e[0]); l.setAttribute('y1', e[1]);
+      l.setAttribute('x2', e[2]); l.setAttribute('y2', e[3]);
+      l.setAttribute('stroke', '#181511'); l.setAttribute('stroke-width', '0.4');
+      l.setAttribute('stroke-opacity', '0.55');
+      edges.appendChild(l);
+    });
+    labels.forEach(function(lb) {
+      var t = document.createElementNS(svgNs, 'text');
+      t.setAttribute('x', lb[0]); t.setAttribute('y', lb[1]);
+      t.setAttribute('font-family', 'Instrument Serif, serif');
+      t.setAttribute('font-size', '18'); t.setAttribute('font-style', 'italic');
+      t.setAttribute('fill', '#1F3D2E'); t.setAttribute('text-anchor', 'middle');
+      t.textContent = lb[2];
+      labelsG.appendChild(t);
+    });
+  }
+
+  // Ring connectome
+  var ring = document.getElementById('ring-svg');
+  if (ring) {
+    var cx = 110, cy = 110, rr = 88, N = 30;
+    var pts = [];
+    for (var k = 0; k < N; k++) {
+      var a = (k/N)*Math.PI*2 - Math.PI/2;
+      pts.push([cx + rr*Math.cos(a), cy + rr*Math.sin(a)]);
+    }
+    var chords = ring.querySelector('.ring-chords');
+    var rnds = ring.querySelector('.ring-nodes');
+    var ticks = ring.querySelector('.ring-ticks');
+    var pairs = [[0,8],[0,15],[2,11],[2,19],[3,14],[5,17],[5,22],[6,13],[8,20],[9,18],[10,23],[11,25],[13,24],[15,26],[16,2],[19,27],[1,12],[4,21],[7,16],[20,28],[22,4]];
+    pairs.forEach(function(p) {
+      var a = pts[p[0]], b = pts[p[1]];
+      var pa = document.createElementNS(svgNs, 'path');
+      pa.setAttribute('d', 'M ' + a[0] + ' ' + a[1] + ' Q ' + cx + ' ' + cy + ' ' + b[0] + ' ' + b[1]);
+      chords.appendChild(pa);
+    });
+    pts.forEach(function(p, i) {
+      var c = document.createElementNS(svgNs, 'circle');
+      c.setAttribute('cx', p[0]); c.setAttribute('cy', p[1]);
+      c.setAttribute('r', i%7 === 0 ? 3.5 : 2.2);
+      if (i%7 === 0) c.setAttribute('fill', '#1F3D2E');
+      rnds.appendChild(c);
+      var ang = (i/N)*Math.PI*2 - Math.PI/2;
+      var t = document.createElementNS(svgNs, 'line');
+      t.setAttribute('x1', cx + 95*Math.cos(ang)); t.setAttribute('y1', cy + 95*Math.sin(ang));
+      t.setAttribute('x2', cx + 100*Math.cos(ang)); t.setAttribute('y2', cy + 100*Math.sin(ang));
+      ticks.appendChild(t);
+    });
+  }
+
+  // Scroll reveal
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('[data-reveal]').forEach(function(el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('in'); });
+  }
+})();
+
+/* ===== v4 scripts ===== */
+
+// Hero brain — live signal pulses traveling along edges
+(function() {
+  var brain = document.getElementById('brain-svg');
+  if (!brain) return;
+  setTimeout(function() {
+    var edgesG = brain.querySelector('.edges');
+    if (!edgesG) return;
+    var allLines = edgesG.querySelectorAll('line');
+    var edges = [];
+    for (var i = 0; i < allLines.length; i++) {
+      var x1 = parseFloat(allLines[i].getAttribute('x1'));
+      var y1 = parseFloat(allLines[i].getAttribute('y1'));
+      var x2 = parseFloat(allLines[i].getAttribute('x2'));
+      var y2 = parseFloat(allLines[i].getAttribute('y2'));
+      if (x1 > 50 && x1 < 260 && x2 > 50 && x2 < 260 && y1 > 35 && y1 < 270 && y2 > 35 && y2 < 270) {
+        edges.push({ x1: x1, y1: y1, x2: x2, y2: y2 });
+      }
+    }
+    if (edges.length === 0) return;
+    var svgNs = 'http://www.w3.org/2000/svg';
+    var sigG = document.createElementNS(svgNs, 'g');
+    brain.appendChild(sigG);
+    var active = [];
+
+    function spawn() {
+      if (active.length >= 5) return;
+      var e = edges[Math.floor(Math.random() * edges.length)];
+      var c = document.createElementNS(svgNs, 'circle');
+      c.setAttribute('r', 1.7);
+      c.setAttribute('fill', '#1F3D2E');
+      c.setAttribute('cx', e.x1);
+      c.setAttribute('cy', e.y1);
+      sigG.appendChild(c);
+      active.push({ el: c, e: e, t: 0 });
+    }
+
+    function tick() {
+      for (var i = active.length - 1; i >= 0; i--) {
+        var s = active[i];
+        s.t += 0.026;
+        if (s.t >= 1) { s.el.remove(); active.splice(i, 1); continue; }
+        var x = s.e.x1 + (s.e.x2 - s.e.x1) * s.t;
+        var y = s.e.y1 + (s.e.y2 - s.e.y1) * s.t;
+        s.el.setAttribute('cx', x);
+        s.el.setAttribute('cy', y);
+        var op = s.t < 0.2 ? s.t * 5 : (s.t > 0.8 ? (1 - s.t) * 5 : 1);
+        s.el.setAttribute('opacity', op);
+      }
+      if (Math.random() < 0.09) spawn();
+      requestAnimationFrame(tick);
+    }
+    tick();
+  }, 150);
+})();
+
+// Matrix heatmap (Fig. 05)
+(function() {
+  var matrix = document.getElementById('matrix-cells');
+  if (!matrix) return;
+  var svgNs = 'http://www.w3.org/2000/svg';
+  var N = 14, gridW = 140, gridH = 140;
+  var cw = gridW / N, ch = gridH / N;
+  var ox = 30, oy = 16;
+
+  function colorFor(v) {
+    // v in [0,1]: 0 = deep blue, 0.5 = cream, 1 = deep red
+    if (v < 0.5) {
+      var t = v * 2;
+      return 'rgb(' + Math.round(44 + 201 * t) + ',' + Math.round(74 + 166 * t) + ',' + Math.round(124 + 104 * t) + ')';
+    }
+    var t = (v - 0.5) * 2;
+    return 'rgb(' + Math.round(245 - 61 * t) + ',' + Math.round(240 - 187 * t) + ',' + Math.round(228 - 184 * t) + ')';
+  }
+
+  var seed = 42;
+  function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+
+  for (var i = 0; i < N; i++) {
+    for (var j = 0; j < N; j++) {
+      var dist = Math.abs(i - j);
+      var base = Math.exp(-dist * 0.32);
+      var noise = (rnd() - 0.5) * 0.22;
+      var val = Math.max(0, Math.min(1, base + noise));
+      // Block structure for diagonals
+      if ((i < 5 && j < 5) || (i >= 5 && i < 10 && j >= 5 && j < 10) || (i >= 10 && j >= 10)) {
+        val = Math.min(1, val + 0.22);
+      }
+      if (i === j) val = 1;
+      var r = document.createElementNS(svgNs, 'rect');
+      r.setAttribute('x', ox + j * cw);
+      r.setAttribute('y', oy + i * ch);
+      r.setAttribute('width', cw - 0.4);
+      r.setAttribute('height', ch - 0.4);
+      r.setAttribute('fill', colorFor(val));
+      matrix.appendChild(r);
+    }
+  }
+  // Axis tick labels
+  for (var i = 0; i < N; i += 2) {
+    var tx = document.createElementNS(svgNs, 'text');
+    tx.setAttribute('x', ox + i * cw + cw / 2);
+    tx.setAttribute('y', oy + gridH + 10);
+    tx.setAttribute('font-family', 'IBM Plex Mono, monospace');
+    tx.setAttribute('font-size', '6.5');
+    tx.setAttribute('fill', '#6B6055');
+    tx.setAttribute('text-anchor', 'middle');
+    tx.textContent = i;
+    matrix.appendChild(tx);
+    var ty = document.createElementNS(svgNs, 'text');
+    ty.setAttribute('x', ox - 4);
+    ty.setAttribute('y', oy + i * ch + ch / 2 + 2);
+    ty.setAttribute('font-family', 'IBM Plex Mono, monospace');
+    ty.setAttribute('font-size', '6.5');
+    ty.setAttribute('fill', '#6B6055');
+    ty.setAttribute('text-anchor', 'end');
+    ty.textContent = i;
+    matrix.appendChild(ty);
+  }
+  // Colorbar
+  for (var k = 0; k <= 12; k++) {
+    var bar = document.createElementNS(svgNs, 'rect');
+    bar.setAttribute('x', ox + gridW + 10);
+    bar.setAttribute('y', oy + 4 + k * 10);
+    bar.setAttribute('width', 8);
+    bar.setAttribute('height', 10);
+    bar.setAttribute('fill', colorFor(1 - k / 12));
+    matrix.appendChild(bar);
+  }
+  [['+1', 10], ['0', 68], ['−1', 126]].forEach(function(p) {
+    var lb = document.createElementNS(svgNs, 'text');
+    lb.setAttribute('x', ox + gridW + 22);
+    lb.setAttribute('y', oy + p[1]);
+    lb.setAttribute('font-family', 'IBM Plex Mono, monospace');
+    lb.setAttribute('font-size', '6.5');
+    lb.setAttribute('fill', '#6B6055');
+    lb.textContent = p[0];
+    matrix.appendChild(lb);
+  });
+  var rho = document.createElementNS(svgNs, 'text');
+  rho.setAttribute('x', ox + gridW + 10);
+  rho.setAttribute('y', oy - 2);
+  rho.setAttribute('font-family', 'Instrument Serif, serif');
+  rho.setAttribute('font-size', '11');
+  rho.setAttribute('font-style', 'italic');
+  rho.setAttribute('fill', '#1F3D2E');
+  rho.textContent = 'ρ';
+  matrix.appendChild(rho);
+})();
+
+// Waveform paths (Fig. 07) — drawn double-width for seamless scroll
+(function() {
+  var container = document.getElementById('waveform-paths');
+  if (!container) return;
+  var svgNs = 'http://www.w3.org/2000/svg';
+  var W = 560;
+  var bands = [
+    { y: 24,  amp: 7,  freq: 0.13, noise: 1.5, color: '#B8352C' },
+    { y: 60,  amp: 10, freq: 0.08, noise: 2,   color: '#4A7C3A' },
+    { y: 96,  amp: 14, freq: 0.05, noise: 3,   color: '#2C4A7C' },
+    { y: 130, amp: 4,  freq: 0.22, noise: 1,   color: '#1F3D2E' }
+  ];
+  bands.forEach(function(b) {
+    var d = 'M 0 ' + b.y;
+    for (var x = 2; x <= W; x += 2) {
+      var y = b.y
+        + Math.sin(x * b.freq) * b.amp
+        + Math.sin(x * b.freq * 2.7) * b.amp * 0.26
+        + Math.sin(x * 0.011 + b.y) * b.noise;
+      d += ' L ' + x + ' ' + y.toFixed(1);
+    }
+    var p = document.createElementNS(svgNs, 'path');
+    p.setAttribute('d', d);
+    p.setAttribute('stroke', b.color);
+    p.setAttribute('stroke-width', '0.9');
+    p.setAttribute('fill', 'none');
+    p.setAttribute('opacity', '0.82');
+    container.appendChild(p);
+  });
+})();
+
+// Translation canvas — neurons firing on left, becoming falling code on right
+(function() {
+  var canvas = document.getElementById('translation-canvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W, H, DPR = window.devicePixelRatio || 1;
+  var neurons = [], edges = [], signals = [], falling = [];
+  var tokens = ['0','1','0','1','01','10','fn','=>','{}','[]','if','for','()','//','&&','||','n=','σ','α','β','γ','λ','∇','Δ','φ','∑'];
+  var playing = true;
+
+  function resize() {
+    var rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  function initNeurons() {
+    neurons = []; edges = [];
+    var target = 52;
+    var leftX = W * 0.06, rightX = W * 0.38;
+    var attempts = 0;
+    while (neurons.length < target && attempts < 600) {
+      attempts++;
+      var x = leftX + Math.random() * (rightX - leftX);
+      var y = 30 + Math.random() * (H - 60);
+      var ok = true;
+      for (var i = 0; i < neurons.length; i++) {
+        var dx = neurons[i].x - x, dy = neurons[i].y - y;
+        if (dx * dx + dy * dy < 460) { ok = false; break; }
+      }
+      if (ok) neurons.push({ x: x, y: y, vx: 0, vy: 0, bx: x, by: y, fire: 0, size: 1.6 + Math.random() * 1.3 });
+    }
+    for (var i = 0; i < neurons.length; i++) {
+      for (var j = i + 1; j < neurons.length; j++) {
+        var dx = neurons[i].x - neurons[j].x;
+        var dy = neurons[i].y - neurons[j].y;
+        if (dx * dx + dy * dy < 7200) edges.push({ a: i, b: j });
+      }
+    }
+  }
+
+  function fire(idx) {
+    if (idx < 0 || idx >= neurons.length) return;
+    neurons[idx].fire = 1;
+    var cands = [];
+    for (var i = 0; i < edges.length; i++) {
+      if (edges[i].a === idx) cands.push(edges[i].b);
+      else if (edges[i].b === idx) cands.push(edges[i].a);
+    }
+    var n = Math.min(3, cands.length);
+    for (var i = 0; i < n; i++) {
+      var pi = Math.floor(Math.random() * cands.length);
+      signals.push({ src: idx, tgt: cands.splice(pi, 1)[0], t: 0 });
+    }
+  }
+
+  function releaseChar(x, y) {
+    falling.push({
+      x: x, y: y,
+      vx: 2 + Math.random() * 2,
+      vy: 0.3 + Math.random() * 0.5,
+      t: 0,
+      char: tokens[Math.floor(Math.random() * tokens.length)],
+      life: 1, morph: 0, phase: 'emerge'
+    });
+  }
+
+  function update() {
+    for (var i = 0; i < neurons.length; i++) {
+      var n = neurons[i];
+      n.vx += (n.bx - n.x) * 0.002;
+      n.vy += (n.by - n.y) * 0.002;
+      n.vx *= 0.94; n.vy *= 0.94;
+      n.x += n.vx; n.y += n.vy;
+      if (n.fire > 0) n.fire -= 0.018;
+    }
+    if (Math.random() < 0.05) fire(Math.floor(Math.random() * neurons.length));
+
+    for (var i = signals.length - 1; i >= 0; i--) {
+      var s = signals[i];
+      s.t += 0.02;
+      if (s.t >= 1) {
+        var tgt = neurons[s.tgt];
+        if (tgt && tgt.x > W * 0.33) releaseChar(tgt.x, tgt.y);
+        else if (tgt) {
+          tgt.fire = 1;
+          if (Math.random() < 0.22) fire(s.tgt);
+        }
+        signals.splice(i, 1);
+      }
+    }
+
+    for (var i = falling.length - 1; i >= 0; i--) {
+      var c = falling[i];
+      if (c.phase === 'emerge') {
+        c.morph = Math.min(1, c.morph + 0.05);
+        c.x += c.vx * 0.7;
+        c.y += (Math.random() - 0.5) * 0.4;
+        if (c.x > W * 0.54) { c.phase = 'fall'; c.vx = 0; c.vy = 0.8 + Math.random() * 1.2; }
+      } else {
+        c.x += c.vx; c.y += c.vy;
+        c.vy += 0.035;
+        c.life -= 0.003;
+      }
+      if (c.y > H + 20 || c.life <= 0) falling.splice(i, 1);
+    }
+
+    // Ambient falling characters on the right side
+    if (Math.random() < 0.3) {
+      var rx = W * 0.55 + Math.random() * (W * 0.43);
+      falling.push({
+        x: rx, y: -12, vx: 0, vy: 1 + Math.random() * 1.8, t: 0,
+        char: tokens[Math.floor(Math.random() * tokens.length)],
+        life: 1, morph: 1, phase: 'fall'
+      });
+    }
+  }
+
+  function draw() {
+    ctx.fillStyle = 'rgba(245, 240, 228, 0.12)';
+    ctx.fillRect(0, 0, W, H);
+
+    // Edges
+    ctx.strokeStyle = 'rgba(31, 61, 46, 0.14)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    for (var i = 0; i < edges.length; i++) {
+      var a = neurons[edges[i].a], b = neurons[edges[i].b];
+      ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+    }
+    ctx.stroke();
+
+    // Neurons
+    for (var i = 0; i < neurons.length; i++) {
+      var n = neurons[i];
+      if (n.fire > 0) {
+        ctx.fillStyle = 'rgba(31, 61, 46, ' + (n.fire * 0.38) + ')';
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.size + 5 * n.fire, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.fillStyle = n.fire > 0.3 ? '#1F3D2E' : '#181511';
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // Signal pulses with trailing streak
+    for (var i = 0; i < signals.length; i++) {
+      var s = signals[i];
+      var src = neurons[s.src], tgt = neurons[s.tgt];
+      if (!src || !tgt) continue;
+      var x = src.x + (tgt.x - src.x) * s.t;
+      var y = src.y + (tgt.y - src.y) * s.t;
+      var tx = src.x + (tgt.x - src.x) * Math.max(0, s.t - 0.18);
+      var ty = src.y + (tgt.y - src.y) * Math.max(0, s.t - 0.18);
+      var g = ctx.createLinearGradient(tx, ty, x, y);
+      g.addColorStop(0, 'rgba(31, 61, 46, 0)');
+      g.addColorStop(1, 'rgba(31, 61, 46, 0.85)');
+      ctx.strokeStyle = g; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(x, y); ctx.stroke();
+      ctx.fillStyle = '#1F3D2E';
+      ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // Falling characters (code rain)
+    for (var i = 0; i < falling.length; i++) {
+      var c = falling[i];
+      var size = c.phase === 'emerge' ? (7 + c.morph * 5) : 12;
+      ctx.font = size + 'px "IBM Plex Mono", monospace';
+      var alpha = c.phase === 'emerge' ? c.morph : c.life;
+      ctx.fillStyle = 'rgba(31, 61, 46, ' + alpha + ')';
+      ctx.fillText(c.char, c.x, c.y);
+      if (c.phase === 'fall' && c.vy > 1.3) {
+        ctx.fillStyle = 'rgba(184, 53, 44, ' + alpha * 0.35 + ')';
+        ctx.beginPath(); ctx.arc(c.x + 3, c.y - 4, 1.1, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+
+  var lastT = 0;
+  function loop(t) {
+    if (playing && t - lastT > 16) { update(); draw(); lastT = t; }
+    requestAnimationFrame(loop);
+  }
+
+  function start() { resize(); initNeurons(); loop(0); }
+  if (canvas.getBoundingClientRect().width > 0) start();
+  else setTimeout(start, 200);
+
+  var rt;
+  window.addEventListener('resize', function() {
+    clearTimeout(rt);
+    rt = setTimeout(function() { resize(); initNeurons(); }, 250);
+  });
+
+  // Pause when off-screen to save battery
+  if ('IntersectionObserver' in window) {
+    var io2 = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) { playing = entry.isIntersecting; });
+    }, { threshold: 0 });
+    io2.observe(canvas);
+  }
+})();
+</script>
+
+</body>
+</html>
